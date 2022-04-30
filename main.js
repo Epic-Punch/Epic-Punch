@@ -10,7 +10,7 @@ class BasicCharacterControls {
       this._Init(params);
     }
   
-    //test commit
+    //test commit2
     //Make movements false 
     _Init(params) {
       this._params = params;
