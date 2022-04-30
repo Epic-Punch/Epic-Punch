@@ -242,7 +242,7 @@ class BasicWorldDemo {
     //Function to load the model
     _LoadAnimatedModel(){
             const loader = new FBXLoader();
-            loader.setPath('./resources/Boss/');
+            loader.setPath('./resources/Ninja/');
             loader.load('The Boss.fbx', (fbx) => {
                 fbx.scale.setScalar(0.1);
                 fbx.traverse(c => {
@@ -256,7 +256,7 @@ class BasicWorldDemo {
                 this._controls = new BasicCharacterControls(params);
         
                 const anim = new FBXLoader();
-                anim.setPath('./resources/Boss/');
+                anim.setPath('./resources/Ninja/');
                 anim.load('Strut Walking.fbx', (anim) => {
                     const m = new THREE.AnimationMixer(fbx);
                     this._mixers.push(m);
