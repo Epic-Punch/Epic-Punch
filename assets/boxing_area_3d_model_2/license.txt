@@ -1,0 +1,11 @@
+Model Information:
+* title:	Boxing Area 3D Model 2
+* source:	https://sketchfab.com/3d-models/boxing-area-3d-model-2-23b9f0d9c16748f5b214f6e974445f5e
+* author:	nvere (https://sketchfab.com/nvere)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Boxing Area 3D Model 2" (https://sketchfab.com/3d-models/boxing-area-3d-model-2-23b9f0d9c16748f5b214f6e974445f5e) by nvere (https://sketchfab.com/nvere) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

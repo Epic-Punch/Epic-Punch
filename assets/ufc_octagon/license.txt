@@ -1,0 +1,11 @@
+Model Information:
+* title:	UFC Octagon
+* source:	https://sketchfab.com/3d-models/ufc-octagon-3b174beff6d949339b426c061a845763
+* author:	Anthony Yanez (https://sketchfab.com/paulyanez)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "UFC Octagon" (https://sketchfab.com/3d-models/ufc-octagon-3b174beff6d949339b426c061a845763) by Anthony Yanez (https://sketchfab.com/paulyanez) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
