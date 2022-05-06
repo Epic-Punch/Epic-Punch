@@ -1,8 +1,10 @@
 
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
 import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+
 
 class BasicCharacterControllerProxy {
   constructor(animations) {
@@ -423,10 +425,6 @@ export default class BasicCharacterController {
       acc.multiplyScalar(2.0);
     }
 
-    if (this._stateMachine._currentState.Name == 'dance') {
-      acc.multiplyScalar(0.0);
-    }
-
     if (this._input._keys.forward) {
       velocity.z += acc.z * timeInSeconds;
     }
@@ -562,17 +560,31 @@ class BasicWorldDemo {
         plane.castShadow = false;
         plane.receiveShadow = true;
         plane.rotation.x = -Math.PI /2;
-        this._scene.add(plane);
+       this._scene.add(plane);
 
         //Load the model
         this._mixers = [];
         this._previousRAF = null;
+        
+        const glloader = new GLTFLoader();
+    
+        glloader.load( './resources/scene.gltf', ( gltf ) => {
+          gltf.scene.scale.setScalar(0.1);
+          gltf.scene.position.y = -10;  
+          gltf.scene.traverse(c =>{
+                c.castShadow = true;
+            });
+          this._scene.add( gltf.scene ); //add arena to scene
+        });
+
+
         this._LoadAnimatedModel();
         
 
         //Calls the request for annimation frame, this is the render function
         this._RAF();
     }
+
 
     //Function to load the model
     _LoadAnimatedModel(){
