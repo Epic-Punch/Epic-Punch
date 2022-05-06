@@ -24,12 +24,18 @@ class BasicCharacterControllerInput {
 
   _Init() {
     this._keys = {
-      forward: false,
-      backward: false,
-      left: false,
-      right: false,
+      forward1: false,
+      backward1: false,
+      left1: false,
+      right1: false,
       space: false,
+      m: false,
+      forward2: false,
+      backward2: false,
+      left2: false,
+      right2: false,
       shift: false,
+      enter: false,
     };
     document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
     document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
@@ -38,22 +44,40 @@ class BasicCharacterControllerInput {
   _onKeyDown(event) {
     switch (event.keyCode) {
       case 87: // w
-        this._keys.forward = true;
+        this._keys.forward1 = true;
         break;
       case 65: // a
-        this._keys.left = true;
+        this._keys.left1 = true;
         break;
       case 83: // s
-        this._keys.backward = true;
+        this._keys.backward1 = true;
         break;
       case 68: // d
-        this._keys.right = true;
+        this._keys.right1 = true;
         break;
       case 32: // SPACE
         this._keys.space = true;
         break;
-      case 16: // SHIFT
+      case 77: // m
+        this._keys.m = true;
+        break;
+        case 87: // up arrow
+        this._keys.forward2 = true;
+        break;
+      case 65: // left arrow
+        this._keys.left2 = true;
+        break;
+      case 83: // down arrow
+        this._keys.backward2 = true;
+        break;
+      case 68: // right arrow
+        this._keys.right2 = true;
+        break;
+      case 32: // shift
         this._keys.shift = true;
+        break;
+      case 77: // enter
+        this._keys.enter = true;
         break;
     }
   }
@@ -61,22 +85,40 @@ class BasicCharacterControllerInput {
   _onKeyUp(event) {
     switch(event.keyCode) {
       case 87: // w
-        this._keys.forward = false;
+        this._keys.forward1 = false;
         break;
       case 65: // a
-        this._keys.left = false;
+        this._keys.left1 = false;
         break;
       case 83: // s
-        this._keys.backward = false;
+        this._keys.backward1 = false;
         break;
       case 68: // d
-        this._keys.right = false;
+        this._keys.right1 = false;
         break;
       case 32: // SPACE
         this._keys.space = false;
         break;
-      case 16: // SHIFT
+      case 77: // m
+        this._keys.m = false;
+        break;
+        case 87: // up arrow
+        this._keys.forward2 = false;
+        break;
+      case 65: // left arrow
+        this._keys.left2 = false;
+        break;
+      case 83: // down arrow
+        this._keys.backward2 = false;
+        break;
+      case 68: // right arrow
+        this._keys.right2 = false;
+        break;
+      case 32: // shift
         this._keys.shift = false;
+        break;
+      case 77: // enter
+        this._keys.enter = false;
         break;
     }
   }
@@ -128,9 +170,9 @@ class CharacterFSM extends FiniteStateMachine {
 
   _Init() {
     this._AddState('Idle', IdleState);
-    this._AddState('Punch', JumpState);
+    this._AddState('Punch', PunchState);
     this._AddState('Run', RunState);
-    this._AddState('Jump', PunchState);
+    this._AddState('Jump', JumpState);
   }
 };
 
@@ -212,19 +254,9 @@ class RunState extends State {
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
 
       curAction.enabled = true;
-
-      if (prevState.Name == 'Punch') {
-        const ratio = curAction.getClip().duration / prevAction.getClip().duration;
-        curAction.time = prevAction.time * ratio;
-      } else {
-        curAction.time = 0.0;
-        curAction.setEffectiveTimeScale(1.0);
-        curAction.setEffectiveWeight(1.0);
-      }
-
+      const ratio = curAction.getClip().duration / prevAction.getClip().duration;
+      curAction.time = prevAction.time * ratio;
       curAction.crossFadeFrom(prevAction, 0.5, true);
-      curAction.play();
-    } else {
       curAction.play();
     }
   }
@@ -233,8 +265,11 @@ class RunState extends State {
   }
 
   Update(timeElapsed, input) {
-    if (input._keys.forward || input._keys.backward) {
-      if (input._keys.shift) {
+    if (input._keys.forward1 || input._keys.backward1) {
+      if (input._keys.space) {
+        this._parent.SetState('Jump');
+      }
+      if (input._keys.m) {
         this._parent.SetState('Punch');
       }
       return;
@@ -258,35 +293,20 @@ class PunchState extends State {
     const curAction = this._parent._proxy._animations['Punch'].action;
     if (prevState) {
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
-
       curAction.enabled = true;
-
-      if (prevState.Name == 'Run') {
-        const ratio = curAction.getClip().duration / prevAction.getClip().duration;
-        curAction.time = prevAction.time * ratio;
-      } else {
-        curAction.time = 0.0;
-        curAction.setEffectiveTimeScale(1.0);
-        curAction.setEffectiveWeight(1.0);
-      }
-
-      curAction.crossFadeFrom(prevAction, 0.5, true);
-      curAction.play();
-    } else {
+      const ratio = curAction.getClip().duration / prevAction.getClip().duration;
+      curAction.time = 60;
+      curAction.crossFadeFrom(prevAction, 0.001  , true);
       curAction.play();
     }
+    
   }
 
   Exit() {
   }
 
   Update(timeElapsed, input) {
-    if (input._keys.forward || input._keys.backward) {
-      if (!input._keys.shift) {
-        this._parent.SetState('Run');
-      }
-      return;
-    }
+      
 
     this._parent.SetState('Idle');
   }
@@ -321,10 +341,10 @@ class IdleState extends State {
   }
 
   Update(_, input) {
-    if (input._keys.forward || input._keys.backward) {
+    if (input._keys.forward1 || input._keys.backward1) {
       this._parent.SetState('Run');
-    } else if (input._keys.space) {
-      this._parent.SetState('Jump');
+    } else if (input._keys.m) {
+      this._parent.SetState('Punch');
     }
   }
 };
@@ -425,20 +445,20 @@ export default class BasicCharacterController {
       acc.multiplyScalar(2.0);
     }
 
-    if (this._input._keys.forward) {
+    if (this._input._keys.forward1) {
       velocity.z += acc.z * timeInSeconds;
     }
-    if (this._input._keys.backward) {
+    if (this._input._keys.backward1) {
       velocity.z -= acc.z * timeInSeconds;
     }
-    if (this._input._keys.left) {
+    if (this._input._keys.left1) {
       _A.set(0, 1, 0);
-      _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
+      _Q.setFromAxisAngle(_A, 2.0 * Math.PI * timeInSeconds * this._acceleration.y);
       _R.multiply(_Q);
     }
-    if (this._input._keys.right) {
+    if (this._input._keys.right1) {
       _A.set(0, 1, 0);
-      _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
+      _Q.setFromAxisAngle(_A, 2.0 * -Math.PI * timeInSeconds * this._acceleration.y);
       _R.multiply(_Q);
     }
 
