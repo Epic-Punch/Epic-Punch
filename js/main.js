@@ -570,17 +570,7 @@ class BasicWorldDemo {
         texture.encoding = THREE.sRGBEncoding;
         this._scene.background = texture; // set it as the background
 
-        //Adds a plane to the scene can be our ground
-        const plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(100, 100, 1, 1),
-            new THREE.MeshStandardMaterial({
-                color: 0xFFFFFF
-            }));
-
-        plane.castShadow = false;
-        plane.receiveShadow = true;
-        plane.rotation.x = -Math.PI /2;
-       this._scene.add(plane);
+        
 
         //Load the model
         this._mixers = [];
@@ -597,14 +587,26 @@ class BasicWorldDemo {
           this._scene.add( gltf.scene ); //add arena to scene
         });
 
-
+        this.Arena();
         this._LoadAnimatedModel();
         
 
         //Calls the request for annimation frame, this is the render function
         this._RAF();
     }
-
+    Arena()
+    {
+        const loader = new GLTFLoader();
+    
+    loader.load( 'resources/boxing_area_3d_model_2/scene.gltf', ( gltf ) => {
+      gltf.scene.scale.setScalar(0.1);
+      gltf.scene.position.y = -10;  
+      gltf.scene.traverse(c =>{
+            c.castShadow = true;
+        });
+      this._scene.add( gltf.scene ); //add arena to scene
+    });
+    }
 
     //Function to load the model
     _LoadAnimatedModel(){
