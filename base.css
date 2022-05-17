@@ -16,10 +16,20 @@ body {
 .ui {
     position: absolute;
     top: 0;
-    left: 0;
-    font-family: 'IM Fell French Canon', serif;
+    background-color: blue;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
 }
 
 .mybar{
     background-color: aqua;
+    
+    
+}
+
+.enemybar {
+    background-color: red;
+    margin-right: 20px;
 }
