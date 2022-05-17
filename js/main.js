@@ -865,15 +865,19 @@ class BasicWorldDemo {
         this._threejs.setSize(window.innerWidth, window.innerHeight);
     }
 
+    
     //The render function to render the scene and camera each frame
     _RAF() {
+  
         requestAnimationFrame((t) => {
           if (this._previousRAF === null) {
             this._previousRAF = t;
           }
     
           this._RAF();
-    
+          
+          //let num = document.getElementById("mybar").clientWidth -1
+          //document.getElementById("mybar").style.width = num+"px";
           this._threejs.render(this._scene, this._camera);
           this._Step(t - this._previousRAF);
           this._previousRAF = t;
