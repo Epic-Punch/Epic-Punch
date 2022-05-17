@@ -379,10 +379,13 @@ export default class BasicCharacterController {
     loader.setPath('./resources/Characters/');
     loader.load('Ninja.fbx', (fbx) => {
       fbx.scale.setScalar(0.1);
+      fbx.position.set(-25, 0, -27);
+      fbx.rotation.set(0, Math.PI / 2, 0)
       fbx.traverse(c => {
         c.castShadow = true;
       });
 
+    
       this._target = fbx;
       this._params.scene.add(this._target);
 
@@ -410,6 +413,43 @@ export default class BasicCharacterController {
       loader.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
       loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
     });
+
+    loader.load('The Boss.fbx', (fbx) => {
+      fbx.scale.setScalar(0.1);
+      fbx.position.set(30, 0, 27);
+      fbx.rotation.set(0, -Math.PI / 1.5, 0)
+      fbx.traverse(c => {
+        c.castShadow = true;
+      });
+
+      this._target = fbx;
+      this._params.scene.add(this._target);
+
+      this._mixer = new THREE.AnimationMixer(this._target);
+
+      this._manager = new THREE.LoadingManager();
+      this._manager.onLoad = () => {
+        this._stateMachine.SetState('Idle');
+      };
+
+      const _OnLoad = (animName, anim) => {
+        const clip = anim.animations[0];
+        const action = this._mixer.clipAction(clip);
+
+        this._animations[animName] = {
+          clip: clip,
+          action: action,
+        };
+      };
+
+      const loader = new FBXLoader(this._manager);
+      loader.setPath('./resources/Movements/');
+      loader.load('Run.fbx', (a) => { _OnLoad('Run', a); });
+      loader.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
+      loader.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
+      loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
+    });
+    
   }
 
 
@@ -514,7 +554,8 @@ class BasicWorldDemo {
         this._threejs.setSize(window.innerWidth, window.innerHeight);
 
         //***************************** donno */
-        document.body.appendChild(this._threejs.domElement);
+        document.getElementById('container').appendChild(this._threejs.domElement);
+        //document.body.appendChild(this._threejs.domElement);
 
         //if the size of the window is changed we perform a function to correct the scene
         window.addEventListener('resize', () => {
@@ -552,6 +593,10 @@ class BasicWorldDemo {
         this._scene.add(light);
 
 
+
+
+
+
         //Get the world textures for the skybox
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
@@ -560,12 +605,12 @@ class BasicWorldDemo {
 
         const loader = new THREE.CubeTextureLoader(); //load the images
         const texture = loader.load([
-            './resources/posx.jpg',
-            './resources/negx.jpg',
-            './resources/posy.jpg',
-            './resources/negy.jpg',
-            './resources/posz.jpg',
-            './resources/negz.jpg',
+            './resources/px.png',
+            './resources/nx.png',
+            './resources/py.png',
+            './resources/ny.png',
+            './resources/pz.png',
+            './resources/nz.png',
         ])
         texture.encoding = THREE.sRGBEncoding;
         this._scene.background = texture; // set it as the background
