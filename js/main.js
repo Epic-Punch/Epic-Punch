@@ -169,10 +169,14 @@ class CharacterFSM extends FiniteStateMachine {
   }
 
   _Init() {
-    this._AddState('Idle', IdleState);
-    this._AddState('Punch', PunchState);
-    this._AddState('Run', RunState);
-    this._AddState('Jump', JumpState);
+    this._AddState('Idle1', IdleState1);
+    this._AddState('Punch1', PunchState1);
+    this._AddState('Run1', RunState1);
+    this._AddState('Jump1', JumpState1);
+    this._AddState('Idle2', IdleState2);
+    this._AddState('Punch2', PunchState2);
+    this._AddState('Run2', RunState2);
+    this._AddState('Jump2', JumpState2);
   }
 };
 
@@ -188,7 +192,7 @@ class State {
 };
 
 
-class JumpState extends State {
+class JumpState1 extends State {
   constructor(parent) {
     super(parent);
 
@@ -198,11 +202,11 @@ class JumpState extends State {
   }
 
   get Name() {
-    return 'Jump';
+    return 'Jump1';
   }
 
   Enter(prevState) {
-    const curAction = this._parent._proxy._animations['Jump'].action;
+    const curAction = this._parent._proxy._animations['Jump1'].action;
     const mixer = curAction.getMixer();
     mixer.addEventListener('finished', this._FinishedCallback);
 
@@ -221,11 +225,11 @@ class JumpState extends State {
 
   _Finished() {
     this._Cleanup();
-    this._parent.SetState('Idle');
+    this._parent.SetState('Idle1');
   }
 
   _Cleanup() {
-    const action = this._parent._proxy._animations['Jump'].action;
+    const action = this._parent._proxy._animations['Jump1'].action;
     
     action.getMixer().removeEventListener('finished', this._CleanupCallback);
   }
@@ -239,17 +243,17 @@ class JumpState extends State {
 };
 
 
-class RunState extends State {
+class RunState1 extends State {
   constructor(parent) {
     super(parent);
   }
 
   get Name() {
-    return 'Run';
+    return 'Run1';
   }
 
   Enter(prevState) {
-    const curAction = this._parent._proxy._animations['Run'].action;
+    const curAction = this._parent._proxy._animations['Run1'].action;
     if (prevState) {
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
 
@@ -267,30 +271,30 @@ class RunState extends State {
   Update(timeElapsed, input) {
     if (input._keys.forward1 || input._keys.backward1) {
       if (input._keys.space) {
-        this._parent.SetState('Jump');
+        this._parent.SetState('Jump1');
       }
       if (input._keys.m) {
-        this._parent.SetState('Punch');
+        this._parent.SetState('Punch1');
       }
       return;
     }
 
-    this._parent.SetState('Idle');
+    this._parent.SetState('Idle1');
   }
 };
 
 
-class PunchState extends State {
+class PunchState1 extends State {
   constructor(parent) {
     super(parent);
   }
 
   get Name() {
-    return 'Punch';
+    return 'Punch1';
   }
 
   Enter(prevState) {
-    const curAction = this._parent._proxy._animations['Punch'].action;
+    const curAction = this._parent._proxy._animations['Punch1'].action;
     if (prevState) {
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
       curAction.enabled = true;
@@ -308,22 +312,22 @@ class PunchState extends State {
   Update(timeElapsed, input) {
       
 
-    this._parent.SetState('Idle');
+    this._parent.SetState('Idle1');
   }
 };
 
 
-class IdleState extends State {
+class IdleState1 extends State {
   constructor(parent) {
     super(parent);
   }
 
   get Name() {
-    return 'Idle';
+    return 'Idle1';
   }
 
   Enter(prevState) {
-    const idleAction = this._parent._proxy._animations['Idle'].action;
+    const idleAction = this._parent._proxy._animations['Idle1'].action;
     if (prevState) {
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
       idleAction.time = 0.0;
@@ -342,9 +346,171 @@ class IdleState extends State {
 
   Update(_, input) {
     if (input._keys.forward1 || input._keys.backward1) {
-      this._parent.SetState('Run');
+      this._parent.SetState('Run1');
     } else if (input._keys.m) {
-      this._parent.SetState('Punch');
+      this._parent.SetState('Punch1');
+    }
+  }
+};
+
+//-------------------------------------------character 2 ---------------------------------------------------------------
+class JumpState2 extends State {
+  constructor(parent) {
+    super(parent);
+
+    this._FinishedCallback = () => {
+      this._Finished();
+    }
+  }
+
+  get Name() {
+    return 'Jump2';
+  }
+
+  Enter(prevState) {
+    const curAction2 = this._parent._proxy._animations['Jump2'].action;
+    const mixer = curAction2.getMixer();
+    mixer.addEventListener('finished', this._FinishedCallback);
+
+    if (prevState) {
+      const prevAction = this._parent._proxy._animations[prevState.Name].action;
+
+      curAction2.reset();  
+      curAction2.setLoop(THREE.LoopOnce, 1);
+      curAction2.clampWhenFinished = true;
+      curAction2.crossFadeFrom(prevAction, 0.2, true);
+      curAction2.play();
+    } else {
+      curAction2.play();
+    }
+  }
+
+  _Finished() {
+    this._Cleanup();
+    this._parent.SetState('Idle2');
+  }
+
+  _Cleanup() {
+    const action = this._parent._proxy._animations['Jump2'].action;
+    
+    action.getMixer().removeEventListener('finished', this._CleanupCallback);
+  }
+
+  Exit() {
+    this._Cleanup();
+  }
+
+  Update(_) {
+  }
+};
+
+
+class RunState2 extends State {
+  constructor(parent) {
+    super(parent);
+  }
+
+  get Name() {
+    return 'Run2';
+  }
+
+  Enter(prevState) {
+    const curAction2 = this._parent._proxy._animations['Run2'].action;
+    if (prevState) {
+      const prevAction = this._parent._proxy._animations[prevState.Name].action;
+
+      curAction2.enabled = true;
+      const ratio = curAction2.getClip().duration / prevAction.getClip().duration;
+      curAction2.time = prevAction.time * ratio;
+      curAction2.crossFadeFrom(prevAction, 0.5, true);
+      curAction2.play();
+    }
+  }
+
+  Exit() {
+  }
+
+  Update(timeElapsed, input) {
+    if (input._keys.forward2 || input._keys.backward2) {
+      if (input._keys.shift) {
+        this._parent.SetState('Jump2');
+      }
+      if (input._keys.enter) {
+        this._parent.SetState('Punch2');
+      }
+      return;
+    }
+
+    this._parent.SetState('Idle2');
+  }
+};
+
+
+class PunchState2 extends State {
+  constructor(parent) {
+    super(parent);
+  }
+
+  get Name() {
+    return 'Punch2';
+  }
+
+  Enter(prevState) {
+    const curAction = this._parent._proxy._animations['Punch2'].action;
+    if (prevState) {
+      const prevAction = this._parent._proxy._animations[prevState.Name].action;
+      curAction.enabled = true;
+      const ratio = curAction.getClip().duration / prevAction.getClip().duration;
+      curAction.time = 60;
+      curAction.crossFadeFrom(prevAction, 0.001  , true);
+      curAction.play();
+    }
+    
+  }
+
+  Exit() {
+  }
+
+  Update(timeElapsed, input) {
+      
+
+    this._parent.SetState('Idle2');
+  }
+};
+
+
+class IdleState2 extends State {
+  constructor(parent) {
+    super(parent);
+  }
+
+  get Name() {
+    return 'Idle2';
+  }
+
+  Enter(prevState) {
+    const idleAction = this._parent._proxy._animations['Idle2'].action;
+    if (prevState) {
+      const prevAction = this._parent._proxy._animations[prevState.Name].action;
+      idleAction.time = 0.0;
+      idleAction.enabled = true;
+      idleAction.setEffectiveTimeScale(1.0);
+      idleAction.setEffectiveWeight(1.0);
+      idleAction.crossFadeFrom(prevAction, 0.5, true);
+      idleAction.play();
+    } else {
+      idleAction.play();
+    }
+  }
+
+  Exit() {
+  }
+
+  Update(_, input) {
+    if (input._keys.forward2 || input._keys.backward2) {
+      this._parent.SetState('Run2');
+    } else if (input._keys.enter) {
+      this._parent.SetState('Punch2');
     }
   }
 };
@@ -371,10 +537,11 @@ export default class BasicCharacterController {
     this._stateMachine = new CharacterFSM(
       new BasicCharacterControllerProxy(this._animations));
     
-    this._LoadModels();
+    this._LoadModel1();
+    this._LoadModel2();
   }
 
-  _LoadModels() {
+  _LoadModel1() {
     const loader = new FBXLoader();
     loader.setPath('./resources/Characters/');
     loader.load('Ninja.fbx', (fbx) => {
@@ -393,7 +560,7 @@ export default class BasicCharacterController {
 
       this._manager = new THREE.LoadingManager();
       this._manager.onLoad = () => {
-        this._stateMachine.SetState('Idle');
+        this._stateMachine.SetState('Idle1');
       };
 
       const _OnLoad = (animName, anim) => {
@@ -408,13 +575,17 @@ export default class BasicCharacterController {
 
       const loader = new FBXLoader(this._manager);
       loader.setPath('./resources/Movements/');
-      loader.load('Run.fbx', (a) => { _OnLoad('Run', a); });
-      loader.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
-      loader.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
-      loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
+      loader.load('Run1.fbx', (a) => { _OnLoad('Run1', a); });
+      loader.load('Punch1.fbx', (a) => { _OnLoad('Punch1', a); });
+      loader.load('Idle1.fbx', (a) => { _OnLoad('Idle1', a); });
+      loader.load('Jump1.fbx', (a) => { _OnLoad('Jump1', a); });
     });
+  }
 
-    loader.load('The Boss.fbx', (fbx) => {
+  _LoadModel2() {
+    const loader2 = new FBXLoader();
+    loader2.setPath('./resources/Characters/');
+    loader2.load('The Boss.fbx', (fbx) => {
       fbx.scale.setScalar(0.1);
       fbx.position.set(30, 0, 27);
       fbx.rotation.set(0, -Math.PI / 1.5, 0)
@@ -429,7 +600,7 @@ export default class BasicCharacterController {
 
       this._manager = new THREE.LoadingManager();
       this._manager.onLoad = () => {
-        this._stateMachine.SetState('Idle');
+        this._stateMachine.SetState('Idle2');
       };
 
       const _OnLoad = (animName, anim) => {
@@ -442,12 +613,12 @@ export default class BasicCharacterController {
         };
       };
 
-      const loader = new FBXLoader(this._manager);
-      loader.setPath('./resources/Movements/');
-      loader.load('Run.fbx', (a) => { _OnLoad('Run', a); });
-      loader.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
-      loader.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
-      loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
+      const loader2 = new FBXLoader(this._manager);
+      loader2.setPath('./resources/Movements/');
+      loader2.load('Run2.fbx', (a) => { _OnLoad('Run2', a); });
+      loader2.load('Punch2.fbx', (a) => { _OnLoad('Punch2', a); });
+      loader2.load('Idle2.fbx', (a) => { _OnLoad('Idle2', a); });
+      loader2.load('Jump2.fbx', (a) => { _OnLoad('Jump2', a); });
     });
     
   }
@@ -569,6 +740,9 @@ class BasicWorldDemo {
         const far = 1000.0;
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
         this._camera.position.set(25, 10, 25);
+        //camera.position.x = 20;
+        //camera.position.y = 14;
+        //camera.position.z = 15;
 
         //Create Scene which is basically a container for all the objects
         this._scene = new THREE.Scene();
