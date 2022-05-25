@@ -5,7 +5,8 @@ import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/js
 import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
 
 
-import BasicCharacterController from './Character_and_Movements.js'
+import Player1_Controller from './Player1_Movements.js'
+import Player2_Controller from './Player2_Movements.js'
 
 //---------------------------------------------------------------- Creating The World ----------------------------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ class BasicWorldDemo {
         const near = 1.0;
         const far = 1000.0;
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        this._camera.position.set(25, 10, 25);
+        this._camera.position.set(-50, 50, 35);
         //camera.position.x = 20;
         //camera.position.y = 14;
         //camera.position.z = 15;
@@ -73,9 +74,6 @@ class BasicWorldDemo {
 
 
 
-
-
-
         //Get the world textures for the skybox
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
@@ -98,6 +96,7 @@ class BasicWorldDemo {
 
         //Load the model
         this._mixers = [];
+        this._mixers2 = [];
         this._previousRAF = null;
         
         const glloader = new GLTFLoader();
@@ -112,14 +111,13 @@ class BasicWorldDemo {
         });
 
         this.Arena();
-        this._LoadAnimatedModel();
+        this._LoadAnimatedModel1();
+        this._LoadAnimatedModel2();
         
-
         //Calls the request for annimation frame, this is the render function
         this._RAF();
     }
-    Arena()
-    {
+    Arena(){
         const loader = new GLTFLoader();
     
     loader.load( 'resources/boxing_area_3d_model_2/scene.gltf', ( gltf ) => {
@@ -132,36 +130,23 @@ class BasicWorldDemo {
     });
     }
 
-    //Function to load the model
-    _LoadAnimatedModel(){
+    //Function to load the controls
+    _LoadAnimatedModel1(){
         const params = {
           camera: this._camera,
           scene: this._scene,
         }
-        this._controls = new BasicCharacterController(params);
+        this._player1 = new Player1_Controller(params);
     }
 
-    _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
-        const loader = new FBXLoader();
-        loader.setPath(path);
-        loader.load(modelFile, (fbx) => {
-          fbx.scale.setScalar(0.1);
-          fbx.traverse(c => {
-            c.castShadow = true;
-          });
-          fbx.position.copy(offset);
-    
-          const anim = new FBXLoader();
-          anim.setPath(path);
-          anim.load(animFile, (anim) => {
-            const m = new THREE.AnimationMixer(fbx);
-            this._mixers.push(m);
-            const idle = m.clipAction(anim.animations[0]);
-            idle.play();
-          });
-          this._scene.add(fbx);
-        });
+    _LoadAnimatedModel2(){
+      const params = {
+        camera: this._camera,
+        scene: this._scene,
       }
+      this._player2 = new Player2_Controller(params);
+  }
+    
 
     // If the window is resized the aspect ratio and scene will change accordingly
     _OnWindowResize(){
@@ -191,13 +176,13 @@ class BasicWorldDemo {
     
     _Step(timeElapsed) {
         const timeElapsedS = timeElapsed * 0.001;
-        if (this._mixers) {
-            this._mixers.map(m => m.update(timeElapsedS));
+        if (this._player2) {
+          this._player2.Update(timeElapsedS);
+        }
+        if (this._player1) {
+            this._player1.Update(timeElapsedS); 
         }
         
-        if (this._controls) {
-            this._controls.Update(timeElapsedS);
-        }
     }
 }
 

@@ -1,5 +1,5 @@
 //---------------------------------------------------------------Finite State Machine for controls -------------------------------------------------------------------------------
-export default class FiniteStateMachine {
+export default class FiniteStateMachine1 {
     constructor() {
       this._states = {};
       this._currentState = null;
