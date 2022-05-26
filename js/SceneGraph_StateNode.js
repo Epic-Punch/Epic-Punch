@@ -20,7 +20,7 @@ class State{
     constructor(parent){
       this._parent = parent;
     }
-  
+    
     Enter() {}
     Exit() {}
     Update() {}
@@ -34,7 +34,6 @@ class State{
         this._Finished();
       }
     }
-  
     get Name() {
       return 'Jump';
     }

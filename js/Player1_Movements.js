@@ -16,12 +16,12 @@ export default class Player1_Controller {
     constructor(params) {
       this._Init(params);
     }
-  
+    
     //test commit2
     //Make movements false 
     _Init(params) {
       this._params = params;
-     
+      
       //Set up the physics of the model moving
       this._decceleration = new THREE.Vector3(-8, -8, -8);
       this._acceleration = new THREE.Vector3(100, 100, 100.0);
@@ -33,6 +33,9 @@ export default class Player1_Controller {
       this._stateMachine = new CharacterFSM(
         new BasicCharacterControllerProxy(this._animations));
     
+
+  
+
       this._LoadModel1();
     }
   
@@ -42,7 +45,8 @@ export default class Player1_Controller {
       loader.load('Ninja.fbx', (fbx) => {
         fbx.scale.setScalar(0.1);
         fbx.position.set(-25, 0, -27);
-        fbx.rotation.set(0, Math.PI / 2, 0)
+        this.position = fbx.position;
+        fbx.rotation.set(0, Math.PI / 2, 0);
         fbx.traverse(c => {
           c.castShadow = true;
         });
@@ -71,6 +75,10 @@ export default class Player1_Controller {
         const loaderM = new FBXLoader(this._manager);
         loaderM.setPath('./resources/Movements/');
         loaderM.load('Run.fbx', (a) => { _OnLoad('Run', a); });
+        loaderM.load('Forward.fbx', (a) => { _OnLoad('Forward', a); });
+        loaderM.load('Backwards.fbx', (a) => { _OnLoad('Backward', a); });
+        loaderM.load('Walking_left.fbx', (a) => { _OnLoad('Walking_left', a); });
+        loaderM.load('Walking_right.fbx', (a) => { _OnLoad('Walking_right', a); });
         loaderM.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
         loaderM.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
         loaderM.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
@@ -83,7 +91,7 @@ export default class Player1_Controller {
     
   
     //Functions for the physics of the movements
-    Update(timeInSeconds) {
+    Update(timeInSeconds, p2) {
       if (!this._target) {
         return;
       }
@@ -99,7 +107,7 @@ export default class Player1_Controller {
       frameDecceleration.multiplyScalar(timeInSeconds);
       velocity.add(frameDecceleration);
   
-      const controlObject = this._target;
+      this.controlObject = this._target;
   
       const acc = this._acceleration.clone();
   
@@ -118,38 +126,36 @@ export default class Player1_Controller {
   
   
       const forward = new THREE.Vector3(0, 0, 1);
-      forward.applyQuaternion(controlObject.quaternion);
-      forward.normalize();
+      forward.applyQuaternion(this.controlObject.quaternion);
       forward.multiplyScalar(velocity.z * timeInSeconds);
 
       const sideways = new THREE.Vector3(1, 0, 0);
-      sideways.applyQuaternion(controlObject.quaternion);
-      sideways.normalize();
+      sideways.applyQuaternion(this.controlObject.quaternion);
       sideways.multiplyScalar(velocity.y * timeInSeconds);
 
-      controlObject.position.add(forward);
-      controlObject.position.add(sideways);
+
+      this.controlObject.lookAt(p2);
       
-      //const controlObject = this.target;
-      //const _Q - new THREE.Quaternion();
-      //const _A = new THREE.Vector3();
-      //const _R = controlObject.quaternion.clone();
-      //
-      //_A.set(0, 1, 0);
-      //_Q.setFromAxisAngle(_A, 2 * - Math.PI * timeInSeconds * this._acceleration.y);
-      //_R.multiply(_Q);
-      //
-      //control.Object.quaternion.copy(_R)
-      //
-      //const sideways = new THREE.Vector3(1, 0, 0);
-      //sideways.applyQuaternion(controlObject.quaternion);
-      //sideways.normalize();
-      //sideways.multiplyScalar(velocity.x * timeInSeconds);
-      //controlObject.position.add(sideways)
+      
+      //controlObject.quaternion.copy(_Q);
+      
+
+      this.controlObject.position.add(forward);
+      this.controlObject.position.add(sideways);
+      
+
+      
+
+      
+      
   
       if (this._mixer) {
         this._mixer.update(timeInSeconds);
       }
+    }
+
+    getPosition(){
+      return this.position;
     }
   }
   

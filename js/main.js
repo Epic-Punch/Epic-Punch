@@ -112,7 +112,6 @@ class BasicWorldDemo {
 
         this.Arena();
         this._LoadAnimatedModel1();
-        this._LoadAnimatedModel2();
         
         //Calls the request for annimation frame, this is the render function
         this._RAF();
@@ -122,7 +121,7 @@ class BasicWorldDemo {
     
     loader.load( 'resources/boxing_area_3d_model_2/scene.gltf', ( gltf ) => {
       gltf.scene.scale.setScalar(0.1);
-      gltf.scene.position.y = -10;  
+      gltf.scene.position.set(0, -10, 0);  
       gltf.scene.traverse(c =>{
             c.castShadow = true;
         });
@@ -137,15 +136,12 @@ class BasicWorldDemo {
           scene: this._scene,
         }
         this._player1 = new Player1_Controller(params);
+        this._player2 = new Player2_Controller(params);
+        //this.p1pos = this._player1.getPosition();
+        this.p2pos = this._player2.getPosition();
+        
     }
 
-    _LoadAnimatedModel2(){
-      const params = {
-        camera: this._camera,
-        scene: this._scene,
-      }
-      this._player2 = new Player2_Controller(params);
-  }
     
 
     // If the window is resized the aspect ratio and scene will change accordingly
@@ -176,11 +172,14 @@ class BasicWorldDemo {
     
     _Step(timeElapsed) {
         const timeElapsedS = timeElapsed * 0.001;
+        const middle = new THREE.Vector3(0, 0, 0);
         if (this._player2) {
-          this._player2.Update(timeElapsedS);
+          this._player2.Update(timeElapsedS, this._player1.getPosition());
         }
         if (this._player1) {
-            this._player1.Update(timeElapsedS); 
+            this._player1.Update(timeElapsedS, this._player2.getPosition()); 
+            //console.log(this._player2.getPosition());
+            //console.log(middle);
         }
         
     }

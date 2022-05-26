@@ -12,6 +12,7 @@ class BasicCharacterControllerProxy {
   
 
 //--------------------------------------------------------------- Character Control -----------------------------------------------------------------------------------------------
+
 export default class Player2_Controller {
     constructor(params) {
       this._Init(params);
@@ -33,6 +34,7 @@ export default class Player2_Controller {
       this._stateMachine = new CharacterFSM2(
         new BasicCharacterControllerProxy(this._animations));
     
+      this.middle = new THREE.Vector3(0, 0, 0);
       this._LoadModel1();
     }
   
@@ -42,7 +44,9 @@ export default class Player2_Controller {
       loader.load('The Boss.fbx', (fbx) => {
         fbx.scale.setScalar(0.1);
         fbx.position.set(30, 0, 27);
-        fbx.rotation.set(0, -Math.PI / 1.5, 0)
+        this.position = fbx.position;
+        //fbx.rotation.set(0, -Math.PI / 1.5, 0);
+        fbx.lookAt(this.middle);
         fbx.traverse(c => {
           c.castShadow = true;
         });
@@ -83,7 +87,7 @@ export default class Player2_Controller {
     
   
     //Functions for the physics of the movements
-    Update(timeInSeconds) {
+    Update(timeInSeconds, p1) {
       if (!this._target) {
         return;
       }
@@ -99,8 +103,9 @@ export default class Player2_Controller {
       frameDecceleration.multiplyScalar(timeInSeconds);
       velocity.add(frameDecceleration);
   
-      const controlObject = this._target;
-  
+      this.controlObject = this._target;
+      
+      
       const acc = this._acceleration.clone();
   
       if (this._input._keys.forward2) {
@@ -115,41 +120,32 @@ export default class Player2_Controller {
       if (this._input._keys.right2) {
         velocity.y -= acc.y * timeInSeconds;
       }
-  
+      
+      
   
       const forward = new THREE.Vector3(0, 0, 1);
-      forward.applyQuaternion(controlObject.quaternion);
+      forward.applyQuaternion(this.controlObject.quaternion);
       forward.normalize();
       forward.multiplyScalar(velocity.z * timeInSeconds);
 
       const sideways = new THREE.Vector3(1, 0, 0);
-      sideways.applyQuaternion(controlObject.quaternion);
+      sideways.applyQuaternion(this.controlObject.quaternion);
       sideways.normalize();
       sideways.multiplyScalar(velocity.y * timeInSeconds);
 
-      controlObject.position.add(forward);
-      controlObject.position.add(sideways);
+      this.controlObject.position.add(forward);
+      this.controlObject.position.add(sideways);
+
+      this.controlObject.lookAt(p1);
       
-      //const controlObject = this.target;
-      //const _Q - new THREE.Quaternion();
-      //const _A = new THREE.Vector3();
-      //const _R = controlObject.quaternion.clone();
-      //
-      //_A.set(0, 1, 0);
-      //_Q.setFromAxisAngle(_A, 2 * - Math.PI * timeInSeconds * this._acceleration.y);
-      //_R.multiply(_Q);
-      //
-      //control.Object.quaternion.copy(_R)
-      //
-      //const sideways = new THREE.Vector3(1, 0, 0);
-      //sideways.applyQuaternion(controlObject.quaternion);
-      //sideways.normalize();
-      //sideways.multiplyScalar(velocity.x * timeInSeconds);
-      //controlObject.position.add(sideways)
   
       if (this._mixer) {
         this._mixer.update(timeInSeconds);
       }
+    }
+
+    getPosition(){
+      return this.position;
     }
   }
   
