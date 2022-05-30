@@ -414,41 +414,6 @@ export default class BasicCharacterController {
       loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
     });
 
-    loader.load('The Boss.fbx', (fbx) => {
-      fbx.scale.setScalar(0.1);
-      fbx.position.set(30, 0, 27);
-      fbx.rotation.set(0, -Math.PI / 1.5, 0)
-      fbx.traverse(c => {
-        c.castShadow = true;
-      });
-
-      this._target = fbx;
-      this._params.scene.add(this._target);
-
-      this._mixer = new THREE.AnimationMixer(this._target);
-
-      this._manager = new THREE.LoadingManager();
-      this._manager.onLoad = () => {
-        this._stateMachine.SetState('Idle');
-      };
-
-      const _OnLoad = (animName, anim) => {
-        const clip = anim.animations[0];
-        const action = this._mixer.clipAction(clip);
-
-        this._animations[animName] = {
-          clip: clip,
-          action: action,
-        };
-      };
-
-      const loader = new FBXLoader(this._manager);
-      loader.setPath('./resources/Movements/');
-      loader.load('Run.fbx', (a) => { _OnLoad('Run', a); });
-      loader.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
-      loader.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
-      loader.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
-    });
     
   }
 
@@ -633,12 +598,22 @@ class BasicWorldDemo {
         });
 
         this.Arena();
+
         this._LoadAnimatedModel();
+
+        const movearr =['Punch.fbx' , 'Idle.fbx' ]
+
+        let num = Math.floor(Math.random() * 1);
+        this._LoadAnimatedModelAndPlay(
+       './resources/Characters/', 'The Boss.fbx', movearr[num], new THREE.Vector3(0, -1.5, 5));
         
 
         //Calls the request for annimation frame, this is the render function
         this._RAF();
     }
+
+    
+
     Arena()
     {
         const loader = new GLTFLoader();
@@ -667,6 +642,7 @@ class BasicWorldDemo {
         loader.setPath(path);
         loader.load(modelFile, (fbx) => {
           fbx.scale.setScalar(0.1);
+          fbx.rotation.set(0, -Math.PI / 1.5, 0)
           fbx.traverse(c => {
             c.castShadow = true;
           });
@@ -702,8 +678,7 @@ class BasicWorldDemo {
     
           this._RAF();
           
-          //let num = document.getElementById("mybar").clientWidth -1
-          //document.getElementById("mybar").style.width = num+"px";
+          
           this._threejs.render(this._scene, this._camera);
           this._Step(t - this._previousRAF);
           this._previousRAF = t;
