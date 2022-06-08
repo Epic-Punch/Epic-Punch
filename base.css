@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('http://fonts.cdnfonts.com/css/spiky-016');
 
 body {
     width: 100%;
@@ -8,7 +9,7 @@ body {
     margin: 0;
     padding: 0;
     overscroll-behavior: none;
-    font-family: 'Inter';
+    font-family: 'Spiky-016'
 }
 .container {
     width: 100%;
@@ -26,17 +27,55 @@ body {
     
 }
 
-.mybar{
-    background: greenyellow;
+.health{
     width: 600px;
-    height : 70px;
+    background-color: grey;
+    margin : 0 10px;
+    margin-top: 20px;
+    border-radius: 30px;
+    height: 50px;
+    border: 2px solid cyan;
+    color: black;
     
+}
+
+.mybar {
+    background-color: lime;
+    border-radius: 30px;
+    height: 50px;
+    padding-left: 10px;
     
 }
 
 .enemybar {
     background-color: red;
-    margin-right: 20px;
-    width: 600px;
-    height : 70px;
+    border-radius: 30px;
+    height: 50px;
+    padding-left: 10px;
+}
+
+
+
+.timer {
+    color: cyan;
+    font-size: 50px;
+    margin-top: -5px;
+    margin-top :15px
+
+}
+
+.povcamera{
+    left: 40px;
+    top: 120px;
+    position: absolute;
+    border-radius: 50px;
+    border: 3px solid cyan;
+    padding: 10px;
+}
+
+.ficon{
+    border-radius: 200px;
+    width:100px;
+    margin:0px 10px;
+    border: 3px solid cyan;
 }
