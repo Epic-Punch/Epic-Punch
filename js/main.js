@@ -73,12 +73,12 @@ class BasicWorldDemo {
 
         //Set the lighting for the scene, 1 directional light for shadows and then ambient light for rest of scene
         let light = new THREE.DirectionalLight(0xFFFFFF);
-        light.position.set(100, 100, 100);
-        light.target.position.set(0, 0, 0);
+        light.position.set(100, 125, 100);
+        light.target.position.set(0, -10, 0);
         light.castShadow = true;
         light.shadow.bias = -0.01;
-        light.shadow.mapSize.width = 2048;
-        light.shadow.mapSize.height = 2048;
+        light.shadow.mapSize.width = 3048;
+        light.shadow.mapSize.height = 3048;
         light.shadow.camera.near = 1.0;
         light.shadow.camera.far = 500;
         light.shadow.camera.left = 200;
@@ -116,7 +116,7 @@ class BasicWorldDemo {
         this._mixers2 = [];
         this._previousRAF = null;
         
-        const glloader = new GLTFLoader();
+        /* const glloader = new GLTFLoader();
     
         glloader.load( './resources/scene.gltf', ( gltf ) => {
           gltf.scene.scale.setScalar(0.1);
@@ -125,7 +125,7 @@ class BasicWorldDemo {
                 c.castShadow = true;
             });
           this._scene.add( gltf.scene ); //add arena to scene
-        });
+        }); */
 
         this.Arena();
         this._LoadAnimatedModel1();
@@ -155,6 +155,7 @@ class BasicWorldDemo {
       gltf.scene.position.set(0, -10, 0);  
       gltf.scene.traverse(c =>{
             c.castShadow = true;
+            c.receiveShadow = true;
         });
       this._scene.add( gltf.scene ); //add arena to scene
     });
