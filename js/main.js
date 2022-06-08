@@ -87,10 +87,9 @@ class BasicWorldDemo {
         light.shadow.camera.bottom = -200;
         this._scene.add(light);
 
+
         light = new THREE.AmbientLight(0xFFFFFF, 0.25);
         this._scene.add(light);
-
-
 
         //Get the world textures for the skybox
         const controls = new OrbitControls(

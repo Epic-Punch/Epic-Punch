@@ -142,6 +142,30 @@ export default class Player2_Controller {
       if (this._mixer) {
         this._mixer.update(timeInSeconds);
       }
+      if (this.position.x > 30)
+      {
+        this.position.x = 30
+      }
+      if (this.position.y > 0)
+      {
+        this.position.y = 0
+      }
+      if (this.position.z > 27)
+      {
+        this.position.z = 27
+      }
+      if (this.position.x < -25)
+      {
+        this.position.x = -25
+      }
+      if (this.position.y < 0)
+      {
+        this.position.y = 0
+      }
+      if (this.position.z < -27)
+      {
+        this.position.z = -27
+      }
     }
 
     getPosition(){
