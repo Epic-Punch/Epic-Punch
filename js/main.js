@@ -20,7 +20,8 @@ document.getElementById("Home_Screen").addEventListener("click",()=>{
 
 document.getElementById("Start").addEventListener("click",()=>{
   document.getElementById("game").style.display ="block";
-  //document.getElementById("menu2").style.display ="none";
+  document.getElementById("menu2").style.display ="none";
+  document.getElementById("body").style.background ="none";
 })
 
 startWorld()
