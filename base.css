@@ -79,3 +79,45 @@ body {
     margin:0px 10px;
     border: 3px solid cyan;
 }
+
+.button {
+    margin: 0 auto 20px;
+    width: 200px;
+    border-radius: 3px;
+    text-align: center;
+    clear: both;
+    padding: 10px;
+    background-color: #816969;
+    cursor: pointer;
+  }
+
+
+  .screen {
+    opacity: 0;
+    visibility: hidden;
+    
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .screen-intro {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
