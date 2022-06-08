@@ -132,17 +132,17 @@ class BasicWorldDemo {
 
         this._startTime = new Date();
         this._povCam = false;
-        //document.getElementById('povcamera').addEventListener('click', () => {
-        //  if (!this._povCam) {
-        //    this._povCam = true;
-        //  }
-        //  else {
-        //    this._povCam = false;
-        //  }
-        //})
+        document.getElementById('povcamera').addEventListener('click', () => {
+          if (!this._povCam) {
+            this._povCam = true;
+          }
+          else {
+            this._povCam = false;
+          }
+        })
 
         //Calls the function that updates the health bars
-        //this._Health()
+        this._Health()
 
         //Calls the request for annimation frame, this is the render function
         this._RAF();
@@ -194,24 +194,24 @@ class BasicWorldDemo {
           this._RAF();
 
           //Starts the timer when page is rendered
-          //let endTime = new Date();
-          //var timeDiff = endTime - this._startTime;
-          //timeDiff /= 1000;
-          //var seconds = Math.round(timeDiff);
+          let endTime = new Date();
+          var timeDiff = endTime - this._startTime;
+          timeDiff /= 1000;
+          var seconds = Math.round(timeDiff);
 
           //Toggles POV camera
-          //if (this._povCam) {
-          // const newpos = this._player1.getPosition()
-           // this._camera.position.set(newpos.x+1, newpos.y + 16, newpos.z + 2)
-          //  const opppos = this._player2.getPosition()
-          //  this._camera.lookAt(opppos.x, opppos.y+16, opppos.z)
-          //  
-          //}
-          //else if (!this._povCam) {
-          //  this._camera.position.set(-40, 30, 35);
-          //  this._camera.lookAt(0,0,0);
+          if (this._povCam) {
+           const newpos = this._player1.getPosition()
+           this._camera.position.set(newpos.x+1, newpos.y + 16, newpos.z + 2)
+            const opppos = this._player2.getPosition()
+            this._camera.lookAt(opppos.x, opppos.y+16, opppos.z)
             
-          //}
+          }
+          else if (!this._povCam) {
+            this._camera.position.set(-40, 30, 35);
+            this._camera.lookAt(0,0,0);
+            
+          }
 
           //document.getElementById('timer').innerText = seconds.toString()
           this._threejs.render(this._scene, this._camera);
@@ -228,24 +228,25 @@ class BasicWorldDemo {
         }
         if (this._player1) {
             this._player1.Update(timeElapsedS, this._player2.getPosition()); 
-            //console.log(this._player2.getPosition());
-            //console.log(middle);
+            console.log(this._player2.getPosition());
+            console.log(middle);
         }
         
     }
   
-  //_Health(){
-  //    //Reduce the health of opponent when nearby
-  //    document.getElementById('wholepage').addEventListener('keydown', (e) => {
-  //      if (e.keyCode === 70) {
-  //        let posa = this._player1.getPosition()
-  //        let posb = this._player2.getPosition()
-  //        if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
-  //          let num = document.getElementById("enemybar").offsetWidth - 30
-  //          document.getElementById("enemybar").style.width = num+"px";
-  //        }
-  //      }
-  //    })
+  _Health(){
+      //Reduce the health of opponent when nearby
+      document.getElementById('wholepage').addEventListener('keydown', (e) => {
+        if (e.keyCode === 70) {
+          let posa = this._player1.getPosition()
+          let posb = this._player2.getPosition()
+          if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
+            let num = document.getElementById("enemybar").offsetWidth - 30
+            document.getElementById("enemybar").style.width = num+"px";
+          }
+        }
+      })
+    }
       //NB set health reduction of main character HERE!!!!!!!!!!
       /*document.getElementById('wholepage').addEventListener('keydown', (e) => {
         if (e.keyCode === 70) {     //Enter correct key here

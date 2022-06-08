@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id = "wholepage">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no">
@@ -146,9 +146,40 @@
             </div></div>      
         </div>
         <div id="game">
-            <div class="container" id="container">
+          <div class="container" id="container">
+            
+            <section class="game menu">
+                <section class="screen screen-intro active-screen"> 
+                  <div class="button button-newgame">New Game</div>
+                  <div class="button button-settings">How To Play </div>
+                  <div class="button button-credits">Credits</div>
+
+                  </section>
+
+            <div class="ui">
+                <img src="./resources/ninpic.png" class = "ficon"/>
+                <div class="health" id = "health">
+                    <div class="mybar" id="mybar">
+                        Ninja Fury
+                    </div>
+                </div>
+                    <div id="timer" class="timer">
+
+                    </div>
+                <div class="health" id="health">
+                    <div class="enemybar" id="enemybar">
+                        Ely Cyborg
+                    </div>
+                </div>
+                <img src="./resources/elypic.png" class="ficon" />
+                
+            </div>
+            <div class = "povcamera" id="povcamera">
+                <i class="fa fa-camera" style="font-size:48px;color:cyan"></i>
             </div>
         </div>
+        </div>
         <script src="js/main.js" type="module"></script>
+        
     </body>     
 </html>
