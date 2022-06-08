@@ -1,22 +1,159 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
         <title>Epic Punch</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="base.css">
+        <style>
+            @font-face {
+            font-family: Old;
+            src: url('./resources/Fonts/Olden_day.ttf');
+            }
+            @font-face {
+            font-family: Horror;
+            src: url('./resources/Fonts/Horror.ttf');
+            }
+            @font-face {
+            font-family: informal;
+            src: url('./resources/Fonts/Ginformal.otf');
+            }
+            @media screen and (max-height: 500px) {
+              .menuLine{
+                display:none;
+              }
+            }
+            @media screen and (min-height: 501px) {
+              .menuLine{
+                display:block;
+              }
+            }
+            html,body {
+                margin: 0;
+                height: 100vh;
+                overflow: hidden !important;;
+                cursor:default;
+                background: url('./resources/Images/background.jpg');
+            }
+            div {
+                position: absolute;
+                height: 100vh;
+                width: 100vw;
+                /* background-color: #e5e5e5;opacity: 0.8; */
+            }
+            h1 {
+                text-align: center;
+                font-weight: 900;
+                font-size: 2em;
+                line-height: .8em;
+                padding: .2em;
+                border: 5px solid black;
+            }
+            .health-bar-container{
+                border:5px solid #ccc;background-color: white;opacity: 0.7;width: 35%;height: 28px;border-radius: 2px;
+            }
+            .health-bar{
+                color:#000;padding-left:2px;font-size: 15px;background-color:#c54;height: 18px;opacity: 1;
+                font-family: informal;
+            }
+            .common-class{
+                margin: 0!important;opacity: 0.8;font-size:40px;background-color: white;font-family: informal;
+            }
+            .title{ width: 30%;left:35%; text-align: center;}
+            .health1{left:0}
+            .menuLine{
+              margin: 0!important;opacity: 0.8;font-size:80px;color: #cf1313;font-family: Horror;
+            }
+            .menuLine2{
+              margin: 0!important;opacity: 0.8;font-size:40px;color: #ff0000;font-family: Horror;
+            }
+            #loader-container{
+              top:70%;display: none;
+              border:5px solid #ccc;background-color: white;opacity: 0.7;width: 50%;left:25%;height: 28px;border-radius: 2px;
+            }
+            #loadpercent{color:#000;padding-left:2px;font-size: 15px;background-color:grey;height: 18px;opacity: 1;
+                font-family: Horror;width:100%;}
+            #health1percent{width:100%;}
+            .health2{right:0;}
+            #health2percent{width:100%;}
+            #prompt{display: none;}
+            #topBar{display: none;}
+            #menu2{display: none;}
+            #menu{display: block;top:15%;}
+            #controls{display:none;opacity: 0.6;}
+            #controls button{height: 36px ;width: 36px ;}
+            #pause{display: none;}
+            #home{display: none;}
+            #game{display: none;}
+
+        </style>
     </head>
     <body>
-        <script src="js/main.js" type="module"></script>
-        <div class="container" id="container">
-            <div class="ui">
-                <div class="mybar" id = "mybar">
-                    <h1>Player 1</h1>
-                </div>
-                <div class="enemybar" id = "enemybar">
-                    <h1 >Player 2</h1>
-                </div>
+        <div id="topBar">
+              <div class="health1 health-bar-container">
+                <div id="health1percent" class="health-bar">Player1</div>
+              </div> 
+              <div class="title">
+                <h1 style="margin: 0!important;opacity: 0.5;background-color: white;font-family: Old;">
+                  Epic Punch
+                </h1> 
+                <button id="pause" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause" viewBox="0 0 16 16">
+                  <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z"/>
+                </svg></button>
+                <button id="home" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                  <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                </svg></button>
+                <button id="fullscreen" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>
+                </svg></button>
+              </div>
+              <div class="health2 health-bar-container">
+                <div id="health2percent" class="health-bar">Player2</div>
+              </div>             
+        </div>
+        <div id="menu">
+            <div style="text-align: center;">
+                <h1 style="margin: 0!important;opacity: 0.8;font-size:120px;background-color: white;font-family: Old;">Epic Punch</h1> <br>
+                <div><br><br><br>
+                <button id="Enter-Career" style="margin: 0!important;opacity: 0.8;font-size:70px;background-color: white;font-family: Horror;">Enter Career</button>
+                </div><br><br><br><br><br><br><br><br><br><br><br>
+                <button id="Enter-Multiplayer" style="margin: 0!important;opacity: 0.8;font-size:70px;background-color: white;font-family: Horror;">Enter Multiplayer</button><br>
+            </div>        
+        </div>
+        <div id="menu2">
+            <button id="Home_Screen" style="margin: 0!important;opacity: 0.8;font-size:70px;background-color: white;font-family: Horror;">Go back</button><br>
+            <div style="text-align: center;">
+                <br><br><br>
+                <h1 style="margin: 0!important;opacity: 0.8;font-size:120px;background-color: white;font-family: Old;">Epic Punch</h1> <br>
+                <div><br><br><br>
+                    <span class="menuLine">Multiplayer Mode</span> <br>
+                    <span class="menuLine2">Choose your fighters..</span> <br>
+                <span>
+                <select id="player1_select" class ="common-class">
+                    <option value="Ninja">Ninja</option>
+                    <option value="The Boss">The boss</option>
+                </select> 
+                &nbsp;
+                <select id="player2_select" class="common-class">
+                    <option value="Ninja">Ninja</option>
+                    <option value="The Boss">The Boss</option>
+                </select>
+            </span><br><br>
+            <div>
+                <button id="Start" style="margin: 0!important;opacity: 0.8;font-size:40px;background-color: white;font-family: Horror;">Fight!</button>
+            </div><br><br><br>
+    
+            </div></div></div>       
+        </div>
+        <div id="game">
+            <div class="container" id="container">
             </div>
         </div>
-    </body>
+        <div id="prompt" style="top:40%;text-align: center;font-family: Old;font-size: 75px;color: #500202;">
+            <span style="margin: 0!important;opacity: 0.9"></span> 
+        </div>
 
+
+        <script src="js/main.js" type="module"></script>
+    </body>     
 </html>

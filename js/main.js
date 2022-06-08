@@ -8,8 +8,24 @@ import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/j
 import Player1_Controller from './Player1_Movements.js'
 import Player2_Controller from './Player2_Movements.js'
 
-//---------------------------------------------------------------- Creating The World ----------------------------------------------------------------------------------------------
+document.getElementById("Enter-Multiplayer").addEventListener("click",()=>{
+      document.getElementById("menu").style.display ="none";
+      document.getElementById("menu2").style.display ="block";
+})
 
+document.getElementById("Home_Screen").addEventListener("click",()=>{
+  document.getElementById("menu").style.display ="block";
+  document.getElementById("menu2").style.display ="none";
+})
+
+document.getElementById("Start").addEventListener("click",()=>{
+  document.getElementById("game").style.display ="block";
+  //document.getElementById("menu2").style.display ="none";
+})
+
+startWorld()
+//---------------------------------------------------------------- Creating The World ----------------------------------------------------------------------------------------------
+function startWorld(){
 class BasicWorldDemo {
     constructor() {
       this._Initialize();
@@ -192,3 +208,5 @@ let _APP = null;
 window.addEventListener('DOMContentLoaded', () => {
     _APP = new BasicWorldDemo();
 });
+
+}
