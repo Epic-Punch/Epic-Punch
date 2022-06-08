@@ -152,7 +152,7 @@ class State{
     }
   
     Update(timeElapsed, input) { 
-  
+      
       this._parent.SetState('Idle');
     }
   };

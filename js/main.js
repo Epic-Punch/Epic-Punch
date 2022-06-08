@@ -45,11 +45,12 @@ class BasicWorldDemo {
         const near = 1.0;
         const far = 1000.0;
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        this._camera.position.set(-50, 50, 35);
+        this._camera.position.set(-40, 30, 35);
         //camera.position.x = 20;
         //camera.position.y = 14;
         //camera.position.z = 15;
-
+        //: -25, y: 16, z: -25}
+        //{ x: 30, y: 0, z: 27 }
         //Create Scene which is basically a container for all the objects
         this._scene = new THREE.Scene();
 
@@ -112,14 +113,28 @@ class BasicWorldDemo {
 
         this.Arena();
         this._LoadAnimatedModel1();
-        
+
+        this._startTime = new Date();
+        this._povCam = false;
+        document.getElementById('povcamera').addEventListener('click', () => {
+          if (!this._povCam) {
+            this._povCam = true;
+          }
+          else {
+            this._povCam = false;
+          }
+        })
+
+        //Calls the function that updates the health bars
+        this._Health()
+
         //Calls the request for annimation frame, this is the render function
         this._RAF();
+
     }
     Arena(){
-        const loader = new GLTFLoader();
-    
-    loader.load( 'resources/boxing_area_3d_model_2/scene.gltf', ( gltf ) => {
+      const loader = new GLTFLoader();
+      loader.load( 'resources/boxing_area_3d_model_2/scene.gltf', ( gltf ) => {
       gltf.scene.scale.setScalar(0.1);
       gltf.scene.position.set(0, -10, 0);  
       gltf.scene.traverse(c =>{
@@ -161,9 +176,28 @@ class BasicWorldDemo {
           }
     
           this._RAF();
-          
-          //let num = document.getElementById("mybar").clientWidth -1
-          //document.getElementById("mybar").style.width = num+"px";
+
+          //Starts the timer when page is rendered
+          let endTime = new Date();
+          var timeDiff = endTime - this._startTime;
+          timeDiff /= 1000;
+          var seconds = Math.round(timeDiff);
+
+          //Toggles POV camera
+          if (this._povCam) {
+            const newpos = this._player1.getPosition()
+            this._camera.position.set(newpos.x+1, newpos.y + 16, newpos.z + 2)
+            const opppos = this._player2.getPosition()
+            this._camera.lookAt(opppos.x, opppos.y+16, opppos.z)
+            
+          }
+          else if (!this._povCam) {
+            this._camera.position.set(-40, 30, 35);
+            this._camera.lookAt(0,0,0);
+            
+          }
+
+          document.getElementById('timer').innerText = seconds.toString()
           this._threejs.render(this._scene, this._camera);
           this._Step(t - this._previousRAF);
           this._previousRAF = t;
@@ -183,6 +217,32 @@ class BasicWorldDemo {
         }
         
     }
+  
+  _Health(){
+      //Reduce the health of opponent when nearby
+      document.getElementById('wholepage').addEventListener('keydown', (e) => {
+        if (e.keyCode === 70) {
+          let posa = this._player1.getPosition()
+          let posb = this._player2.getPosition()
+          if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
+            let num = document.getElementById("enemybar").offsetWidth - 30
+            document.getElementById("enemybar").style.width = num+"px";
+          }
+        }
+      })
+      //NB set health reduction of main character HERE!!!!!!!!!!
+      {/*document.getElementById('wholepage').addEventListener('keydown', (e) => {
+        if (e.keyCode === 70) {     //Enter correct key here
+          let posa = this._player1.getPosition()
+          let posb = this._player2.getPosition()
+          if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
+            let num = document.getElementById("mybar").offsetWidth - 30
+            document.getElementById("mybar").style.width = num + "px";
+          }
+        }
+      })*/}
+    }
+
 }
 
     

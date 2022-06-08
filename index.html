@@ -1,20 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html id = "wholepage">
     <head>
         <title>Epic Punch</title>
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="base.css">
     </head>
     <body>
         <script src="js/main.js" type="module"></script>
         <div class="container" id="container">
             <div class="ui">
-                <div class="mybar" id = "mybar">
-                    <h1>Player 1</h1>
+                <img src="./resources/ninpic.png" class = "ficon"/>
+                <div class="health" id = "health">
+                    <div class="mybar" id="mybar">
+                        Ninja Fury
+                    </div>
                 </div>
-                <div class="enemybar" id = "enemybar">
-                    <h1 >Player 2</h1>
+                    <div id="timer" class="timer">
+
+                    </div>
+                <div class="health" id="health">
+                    <div class="enemybar" id="enemybar">
+                        Ely Cyborg
+                    </div>
                 </div>
+                <img src="./resources/elypic.png" class="ficon" />
+                
+            </div>
+            <div class = "povcamera" id="povcamera">
+                <i class="fa fa-camera" style="font-size:48px;color:cyan"></i>
             </div>
         </div>
     </body>

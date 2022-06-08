@@ -41,7 +41,7 @@ export default class Player2_Controller {
     _LoadModel1() {
       const loader = new FBXLoader();
       loader.setPath('./resources/Characters/');
-      loader.load('The Boss.fbx', (fbx) => {
+      loader.load('Ely.fbx', (fbx) => {
         fbx.scale.setScalar(0.1);
         fbx.position.set(30, 0, 27);
         this.position = fbx.position;
