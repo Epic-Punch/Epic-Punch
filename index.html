@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <title>Epic Punch</title>
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+            @import url('http://fonts.cdnfonts.com/css/spiky-016');
+
             @font-face {
             font-family: Old;
             src: url('./resources/Fonts/Olden_day.ttf');
@@ -27,13 +30,87 @@
                 display:block;
               }
             }
-            html,body {
+
+            body {
+                width: 100%;
+                height: 100%;
+                position: abosolute;
+                background: #816969;
                 margin: 0;
-                height: 100vh;
-                overflow: hidden !important;;
-                cursor:default;
+                padding: 0;
+                overscroll-behavior: none;
+                font-family: 'Spiky-016';
                 background: url('./resources/Images/background.jpg');
             }
+            .container {
+                width: 100%;
+                height: 100%;
+                position: relative;
+            }
+
+            .ui {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                
+            }
+
+            .health{
+                width: 600px;
+                background-color: grey;
+                margin : 0 10px;
+                margin-top: 20px;
+                border-radius: 30px;
+                height: 50px;
+                border: 2px solid cyan;
+                color: black;
+                
+            }
+
+            .mybar {
+                background-color: lime;
+                border-radius: 30px;
+                height: 50px;
+                padding-left: 10px;
+                
+            }
+
+            .enemybar {
+                background-color: red;
+                border-radius: 30px;
+                height: 50px;
+                padding-left: 10px;
+            }
+
+
+
+            .timer {
+                color: cyan;
+                font-size: 50px;
+                margin-top: -5px;
+                margin-top :15px
+
+            }
+
+            .povcamera{
+                left: 40px;
+                top: 120px;
+                position: absolute;
+                border-radius: 50px;
+                border: 3px solid cyan;
+                padding: 10px;
+            }
+
+            .ficon{
+                border-radius: 200px;
+                width:100px;
+                margin:0px 10px;
+                border: 3px solid cyan;
+            }
+
             div {
                 position: absolute;
                 height: 100vh;
@@ -48,33 +125,15 @@
                 padding: .2em;
                 border: 5px solid black;
             }
-            .health-bar-container{
-                border:5px solid #ccc;background-color: white;opacity: 0.7;width: 35%;height: 28px;border-radius: 2px;
-            }
-            .health-bar{
-                color:#000;padding-left:2px;font-size: 15px;background-color:#c54;height: 18px;opacity: 1;
-                font-family: informal;
-            }
             .common-class{
                 margin: 0!important;opacity: 0.8;font-size:40px;background-color: white;font-family: informal;
             }
-            .title{ width: 30%;left:35%; text-align: center;}
-            .health1{left:0}
             .menuLine{
               margin: 0!important;opacity: 0.8;font-size:80px;color: #cf1313;font-family: Horror;
             }
             .menuLine2{
               margin: 0!important;opacity: 0.8;font-size:40px;color: #ff0000;font-family: Horror;
             }
-            #loader-container{
-              top:70%;display: none;
-              border:5px solid #ccc;background-color: white;opacity: 0.7;width: 50%;left:25%;height: 28px;border-radius: 2px;
-            }
-            #loadpercent{color:#000;padding-left:2px;font-size: 15px;background-color:grey;height: 18px;opacity: 1;
-                font-family: Horror;width:100%;}
-            #health1percent{width:100%;}
-            .health2{right:0;}
-            #health2percent{width:100%;}
             #prompt{display: none;}
             #topBar{display: none;}
             #menu2{display: none;}
@@ -88,29 +147,6 @@
         </style>
     </head>
     <body>
-        <div id="topBar">
-              <div class="health1 health-bar-container">
-                <div id="health1percent" class="health-bar">Player1</div>
-              </div> 
-              <div class="title">
-                <h1 style="margin: 0!important;opacity: 0.5;background-color: white;font-family: Old;">
-                  Epic Punch
-                </h1> 
-                <button id="pause" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause" viewBox="0 0 16 16">
-                  <path d="M6 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z"/>
-                </svg></button>
-                <button id="home" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-                  <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-                </svg></button>
-                <button id="fullscreen" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>
-                </svg></button>
-              </div>
-              <div class="health2 health-bar-container">
-                <div id="health2percent" class="health-bar">Player2</div>
-              </div>             
-        </div>
         <div id="menu">
             <div style="text-align: center;">
                 <h1 style="margin: 0!important;opacity: 0.8;font-size:120px;background-color: white;font-family: Old;">Epic Punch</h1> <br>

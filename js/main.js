@@ -222,14 +222,11 @@ class BasicWorldDemo {
     
     _Step(timeElapsed) {
         const timeElapsedS = timeElapsed * 0.001;
-        const middle = new THREE.Vector3(0, 0, 0);
         if (this._player2) {
           this._player2.Update(timeElapsedS, this._player1.getPosition());
         }
         if (this._player1) {
             this._player1.Update(timeElapsedS, this._player2.getPosition()); 
-            console.log(this._player2.getPosition());
-            console.log(middle);
         }
         
     }
