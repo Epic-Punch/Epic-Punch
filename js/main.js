@@ -241,13 +241,13 @@ class BasicWorldDemo {
           if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
             let num = document.getElementById("enemybar").offsetWidth - 30
             document.getElementById("enemybar").style.width = num+"px";
+            console.log(num)
           }
         }
       })
-    }
       //NB set health reduction of main character HERE!!!!!!!!!!
-      /*document.getElementById('wholepage').addEventListener('keydown', (e) => {
-        if (e.keyCode === 70) {     //Enter correct key here
+      document.getElementById('wholepage').addEventListener('keydown', (e) => {
+        if (e.keyCode === 107) {     //Enter correct key here
           let posa = this._player1.getPosition()
           let posb = this._player2.getPosition()
           if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
@@ -255,7 +255,8 @@ class BasicWorldDemo {
             document.getElementById("mybar").style.width = num + "px";
           }
         }
-      })*/
+      })
+    }
 }
 
 

@@ -77,7 +77,7 @@ export default class Player2_Controller {
         loaderM.load('Run2.fbx', (a) => { _OnLoad('Run2', a); });
         loaderM.load('Punch2.fbx', (a) => { _OnLoad('Punch2', a); });
         loaderM.load('Idle2.fbx', (a) => { _OnLoad('Idle2', a); });
-        loaderM.load('Jump2.fbx', (a) => { _OnLoad('Jump2', a); });
+        loaderM.load('Fighting Idle.fbx', (a) => { _OnLoad('Dodge2', a); });
       });
     }
   

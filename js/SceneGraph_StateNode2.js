@@ -12,10 +12,9 @@ export default class CharacterFSM2 extends FiniteStateMachine {
       this._AddState('Idle2', IdleState2);
       this._AddState('Punch2', PunchState2);
       this._AddState('Run2', RunState2);
-      this._AddState('Jump2', JumpState2);
+      this._AddState('Dodge2', DodgeState2);
     }
   };
-
 class State2{
     constructor(parent){
       this._parent = parent;
@@ -26,53 +25,55 @@ class State2{
     Update() {}
   }
   
-  class JumpState2 extends State2 {
+  class DodgeState2 extends State2 {
     constructor(parent) {
       super(parent);
-  
-      this._FinishedCallback = () => {
+
+      this._FinishedCallback = () =>{
         this._Finished();
       }
     }
   
     get Name() {
-      return 'Jump2';
+      return 'Dodge2';
     }
   
     Enter(prevState) {
-      const curAction = this._parent._proxy._animations['Jump2'].action;
+      const curAction = this._parent._proxy._animations['Dodge2'].action;
       const mixer = curAction.getMixer();
       mixer.addEventListener('finished', this._FinishedCallback);
-  
+
       if (prevState) {
         const prevAction = this._parent._proxy._animations[prevState.Name].action;
-  
-        curAction.reset();  
+        
+        //curAction.reset();
         curAction.setLoop(THREE.LoopOnce, 1);
-        curAction.clampWhenFinished = true;
-        curAction.crossFadeFrom(prevAction, 0.2, true);
+        //curAction.clampWhenFinished = true;
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
         curAction.play();
-      } else {
+      }
+      else{
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
         curAction.play();
       }
     }
-  
-    _Finished() {
+
+    _Finished(){
       this._Cleanup();
-      this._parent.SetState('Idle2');
+      this._parent.SetState('Idle2')
     }
-  
-    _Cleanup() {
-      const action = this._parent._proxy._animations['Jump2'].action;
-      
+
+    _Cleanup(){
+      const action = this._parent._proxy._animations['Dodge2'].action;
+
       action.getMixer().removeEventListener('finished', this._CleanupCallback);
     }
   
     Exit() {
-      this._Cleanup();
+      this._Cleanup
     }
   
-    Update(_) {
+    Update(timeElapsed, input) { 
     }
   };
   
@@ -105,7 +106,7 @@ class State2{
     Update(timeElapsed, input) {
       if (input._keys.forward2 || input._keys.backward2) {
         if (input._keys.dodge2) {
-          this._parent.SetState('Jump2');
+          this._parent.SetState('Dodge2');
         }
         if (input._keys.punch2) {
           this._parent.SetState('Punch2');
@@ -121,6 +122,10 @@ class State2{
   class PunchState2 extends State2 {
     constructor(parent) {
       super(parent);
+
+      this._FinishedCallback = () =>{
+        this._Finished();
+      }
     }
   
     get Name() {
@@ -129,23 +134,40 @@ class State2{
   
     Enter(prevState) {
       const curAction = this._parent._proxy._animations['Punch2'].action;
+      const mixer = curAction.getMixer();
+      mixer.addEventListener('finished', this._FinishedCallback);
+
       if (prevState) {
         const prevAction = this._parent._proxy._animations[prevState.Name].action;
-        curAction.enabled = true;
-        const ratio = curAction.getClip().duration / prevAction.getClip().duration;
-        curAction.time = 60;
-        curAction.crossFadeFrom(prevAction, 0.001  , true);
+        
+        curAction.reset();
+        curAction.setLoop(THREE.LoopOnce, 1);
+        curAction.clampWhenFinished = true;
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
         curAction.play();
       }
-      
+      else{
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
+        curAction.play();
+      }
+    }
+
+    _Finished(){
+      this._Cleanup();
+      this._parent.SetState('Idle2')
+    }
+
+    _Cleanup(){
+      const action = this._parent._proxy._animations['Punch2'].action;
+
+      action.getMixer().removeEventListener('finished', this._CleanupCallback);
     }
   
     Exit() {
+      this._Cleanup
     }
   
     Update(timeElapsed, input) { 
-  
-      this._parent.SetState('Idle2');
     }
   };
   
@@ -182,6 +204,8 @@ class State2{
         this._parent.SetState('Run2');
       } else if (input._keys.punch2) {
         this._parent.SetState('Punch2');
+      } else if (input._keys.dodge2) {
+        this._parent.SetState('Dodge2');
       }
     }
   };
