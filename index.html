@@ -130,15 +130,28 @@
             }
             #menu2{display: none;}
             #menu{display: block;top:15%;}
+            #gameover{display: none;}
             #controls{display:none;opacity: 0.6;}
             #controls button{height: 36px ;width: 36px ;}
             #pause{display: none;}
-            #home{display: none;}
             #game{display: none;}
 
         </style>
     </head>
     <body>
+      <div id="gameover">
+        <div style="text-align: center;">
+            <div><br><br><br><br><br><br><br><br><br>
+                <span class="menuLine">Game Over</span> <br>
+                <span class="menuLine2">You won</span> <br>
+            <br><br>
+        <div>
+            <button id="Start2" style="margin: 0!important;opacity: 0.8;font-size:40px;background-color: white;font-family: Horror;">Main menu</button>
+        </div><br><br><br>
+
+        </div></div>      
+    </div>
+    
         <div id="menu">
             <div style="text-align: center;">
                 <h1 style="margin: 0!important;opacity: 0.8;font-size:120px;background-color: white;font-family: Old;">Epic Punch</h1> <br>
@@ -175,11 +188,6 @@
         </div>
         <div id="game">
           <div class="container" id="container">
-            <div id = "pause">
-              <div class="button button-newgame">New Game</div>
-              <div class="button button-settings">How To Play </div>
-              <div class="button button-credits">Credits</div>
-            </div>
 
             <div class="ui">
                 <img src="./resources/ninpic.png" class = "ficon"/>
@@ -191,6 +199,10 @@
                     <div id="timer" class="timer">
 
                     </div>
+                    <button id="home" style="font-size: small;opacity: 0.5;font-weight: bolder;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                      <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                    </svg></button>
                 <div class="health" id="health">
                     <div class="enemybar" id="enemybar">
                         Ely Cyborg

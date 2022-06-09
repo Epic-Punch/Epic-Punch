@@ -8,6 +8,13 @@ import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/j
 import Player1_Controller from './Player1_Movements.js'
 import Player2_Controller from './Player2_Movements.js'
 
+document.getElementById("home").addEventListener("click",()=>{
+  window.location.reload();
+})
+document.getElementById("Start2").addEventListener("click",()=>{
+  window.location.reload();
+})
+
 document.getElementById("Enter-Multiplayer").addEventListener("click",()=>{
       document.getElementById("menu").style.display ="none";
       document.getElementById("menu2").style.display ="block";
@@ -21,10 +28,15 @@ document.getElementById("Home_Screen").addEventListener("click",()=>{
 document.getElementById("Start").addEventListener("click",()=>{
   document.getElementById("game").style.display ="block";
   document.getElementById("menu2").style.display ="none";
-  document.getElementById("body").style.background ="none";
+  document.getElementById("gameover").style.display ="none";
+
+  document.getElementById("pause").style.display = 'inline-block';
+  document.getElementById("home").style.display = 'inline-block';
+  startWorld(false);
 })
 
 startWorld(false)
+
 //---------------------------------------------------------------- Creating The World ----------------------------------------------------------------------------------------------
 function startWorld(gameover){
 class BasicWorldDemo {
@@ -271,6 +283,7 @@ class BasicWorldDemo {
             console.log(num)
             if (num <= 10){
               this._Gameover()
+
             }
           }
         }
@@ -281,6 +294,8 @@ class BasicWorldDemo {
     _Gameover() {
       setTimeout(function () {
           gameover = true;
+          document.getElementById("game").style.display ="none";
+          document.getElementById("gameover").style.display ="block";
       }, 5000);
     }
 }
