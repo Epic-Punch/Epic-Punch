@@ -49,6 +49,7 @@ export default class Player2_Controller {
         fbx.lookAt(this.middle);
         fbx.traverse(c => {
           c.castShadow = true;
+          c.receiveShadow = true;
         });
   
       
@@ -142,6 +143,7 @@ export default class Player2_Controller {
       if (this._mixer) {
         this._mixer.update(timeInSeconds);
       }
+      /*******bounding the ring*******/
       if (this.position.x > 30)
       {
         this.position.x = 30
