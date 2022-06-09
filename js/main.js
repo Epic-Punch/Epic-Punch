@@ -15,6 +15,16 @@ document.getElementById("Start2").addEventListener("click",()=>{
   window.location.reload();
 })
 
+document.getElementById("Enter-Career").addEventListener("click",()=>{
+  document.getElementById("game").style.display ="block";
+  document.getElementById("menu").style.display ="none";
+  document.getElementById("gameover").style.display ="none";
+
+  document.getElementById("pause").style.display = 'inline-block';
+  document.getElementById("home").style.display = 'inline-block';
+  startWorld(false);
+})
+
 document.getElementById("Enter-Multiplayer").addEventListener("click",()=>{
       document.getElementById("menu").style.display ="none";
       document.getElementById("menu2").style.display ="block";
@@ -87,6 +97,7 @@ class BasicWorldDemo {
 
         //Set the lighting for the scene, 1 directional light for shadows and then ambient light for rest of scene
         let light = new THREE.DirectionalLight(0xFFFFFF);
+        light.rotation.set( 0, Math.PI/2, 0 );
         light.position.set(100, 125, 100);
         light.target.position.set(0, -10, 0);
         light.castShadow = true;
@@ -101,9 +112,24 @@ class BasicWorldDemo {
         light.shadow.camera.bottom = -200;
         this._scene.add(light);
 
-
-        light = new THREE.AmbientLight(0xFFFFFF, 0.25);
+        light = new THREE.DirectionalLight(0xFFFFFF);
+        light.position.set(-100, 125, -100);
+        light.target.position.set(0, -10, 0);
+        light.rotation.set( 0, Math.PI/2, 0 );
+        light.castShadow = true;
+        light.shadow.bias = -0.01;
+        light.shadow.mapSize.width = 3048;
+        light.shadow.mapSize.height = 3048;
+        light.shadow.camera.near = 1.0;
+        light.shadow.camera.far = 500;
+        light.shadow.camera.left = 200;
+        light.shadow.camera.right = -200;
+        light.shadow.camera.top = 200;
+        light.shadow.camera.bottom = -200;
         this._scene.add(light);
+
+        //light = new THREE.AmbientLight('#cc3300', 1);
+        //this._scene.add(light);
 
         //Get the world textures for the skybox
         const controls = new OrbitControls(
