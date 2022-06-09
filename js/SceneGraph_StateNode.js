@@ -13,7 +13,7 @@ export default class CharacterFSM extends FiniteStateMachine {
       this._AddState('Idle', IdleState);
       this._AddState('Punch', PunchState);
       this._AddState('Run', RunState);
-      this._AddState('Jump', JumpState);
+      this._AddState('Dodge', DodgeState);
       this._AddState('Die', DieState);
     }
   };
@@ -28,52 +28,55 @@ class State{
     Update() {}
   }
   
-  class JumpState extends State {
+  class DodgeState extends State {
     constructor(parent) {
       super(parent);
-  
-      this._FinishedCallback = () => {
+
+      this._FinishedCallback = () =>{
         this._Finished();
       }
     }
+  
     get Name() {
-      return 'Jump';
+      return 'Dodge';
     }
   
     Enter(prevState) {
-      const curAction = this._parent._proxy._animations['Jump'].action;
+      const curAction = this._parent._proxy._animations['Dodge'].action;
       const mixer = curAction.getMixer();
       mixer.addEventListener('finished', this._FinishedCallback);
-  
+
       if (prevState) {
         const prevAction = this._parent._proxy._animations[prevState.Name].action;
-  
-        curAction.reset();  
+        
+        //curAction.reset();
         curAction.setLoop(THREE.LoopOnce, 1);
-        curAction.clampWhenFinished = true;
-        curAction.crossFadeFrom(prevAction, 0.2, true);
+        //curAction.clampWhenFinished = true;
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
         curAction.play();
-      } else {
+      }
+      else{
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
         curAction.play();
       }
     }
-  
-    _Finished() {
+
+    _Finished(){
       this._Cleanup();
-      this._parent.SetState('Idle');
+      this._parent.SetState('Idle2')
     }
-  
-    _Cleanup() {
-      const action = this._parent._proxy._animations['Jump'].action;
-      
+
+    _Cleanup(){
+      const action = this._parent._proxy._animations['Dodge'].action;
+
       action.getMixer().removeEventListener('finished', this._CleanupCallback);
     }
   
     Exit() {
-      this._Cleanup();
+      this._Cleanup
     }
   
-    Update(_) {
+    Update(timeElapsed, input) { 
     }
   };
   

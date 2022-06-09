@@ -219,7 +219,7 @@ class BasicWorldDemo {
           //Toggles POV camera
           if (this._povCam) {
            const newpos = this._player1.getPosition()
-           this._camera.position.set(newpos.x+1, newpos.y + 16, newpos.z + 2)
+           this._camera.position.set(newpos.x-10, newpos.y + 20, newpos.z - 10)
             const opppos = this._player2.getPosition()
             this._camera.lookAt(opppos.x, opppos.y+16, opppos.z)
             
