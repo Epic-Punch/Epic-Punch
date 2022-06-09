@@ -24,12 +24,13 @@ document.getElementById("Start").addEventListener("click",()=>{
   document.getElementById("body").style.background ="none";
 })
 
-startWorld()
+startWorld(false)
 //---------------------------------------------------------------- Creating The World ----------------------------------------------------------------------------------------------
-function startWorld(){
+function startWorld(gameover){
 class BasicWorldDemo {
     constructor() {
       this._Initialize();
+      var gameover = gameover;
     }
 
     _Initialize(){
@@ -49,6 +50,7 @@ class BasicWorldDemo {
 
         //***************************** donno */
         document.getElementById('container').appendChild(this._threejs.domElement);
+        
         //document.body.appendChild(this._threejs.domElement);
 
         //if the size of the window is changed we perform a function to correct the scene
@@ -126,9 +128,14 @@ class BasicWorldDemo {
             });
           this._scene.add( gltf.scene ); //add arena to scene
         }); */
-
+        if (!this.gameover){
         this.Arena();
         this._LoadAnimatedModel1();
+        //Calls the function that updates the health bars
+        this._Health()
+        //Calls the request for annimation frame, this is the render function
+        this._RAF();
+        }
 
         this._startTime = new Date();
         this._povCam = false;
@@ -141,11 +148,7 @@ class BasicWorldDemo {
           }
         })
 
-        //Calls the function that updates the health bars
-        this._Health()
-
-        //Calls the request for annimation frame, this is the render function
-        this._RAF();
+        
 
     }
     Arena(){
@@ -191,8 +194,9 @@ class BasicWorldDemo {
           if (this._previousRAF === null) {
             this._previousRAF = t;
           }
-    
+          if (!gameover){
           this._RAF();
+          }
 
           //Starts the timer when page is rendered
           let endTime = new Date();
@@ -240,8 +244,15 @@ class BasicWorldDemo {
           let posb = this._player2.getPosition()
           if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
             let num = document.getElementById("enemybar").offsetWidth - 30
+            if (num < 0){
+              document.getElementById("enemybar").style.width = 0+"px";
+            } else{
             document.getElementById("enemybar").style.width = num+"px";
+            }
             console.log(num)
+            if (num <= 10){
+              this._Gameover()
+            }
           }
         }
       })
@@ -252,10 +263,25 @@ class BasicWorldDemo {
           let posb = this._player2.getPosition()
           if (posb.x - 7 <= posa.x && posa.x <= posb.x + 7) {
             let num = document.getElementById("mybar").offsetWidth - 30
-            document.getElementById("mybar").style.width = num + "px";
+            if (num < 0){
+              document.getElementById("mybar").style.width = 0+"px";
+            } else{
+            document.getElementById("mybar").style.width = num+"px";
+            }
+            console.log(num)
+            if (num <= 10){
+              this._Gameover()
+            }
           }
         }
       })
+    }
+
+
+    _Gameover() {
+      setTimeout(function () {
+          gameover = true;
+      }, 5000);
     }
 }
 
@@ -265,8 +291,9 @@ class BasicWorldDemo {
 
 let _APP = null;
 
+if (!gameover){
 window.addEventListener('DOMContentLoaded', () => {
     _APP = new BasicWorldDemo();
 });
-
+}
 }

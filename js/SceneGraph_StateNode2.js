@@ -1,6 +1,7 @@
 import FiniteStateMachine from './SceneGraph_StateMachine.js'
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 
+
 export default class CharacterFSM2 extends FiniteStateMachine {
     constructor(proxy) {
       super();
@@ -13,6 +14,7 @@ export default class CharacterFSM2 extends FiniteStateMachine {
       this._AddState('Punch2', PunchState2);
       this._AddState('Run2', RunState2);
       this._AddState('Dodge2', DodgeState2);
+      this._AddState('Die2', DieState2);
     }
   };
 class State2{
@@ -171,17 +173,60 @@ class State2{
     }
   };
   
+
+  class DieState2 extends State2 {
+    constructor(parent) {
+      super(parent);
+
+      this._FinishedCallback = () =>{
+        this._Finished();
+      }
+    }
+  
+    get Name() {
+      return 'Die2';
+    }
+  
+    Enter(prevState) {
+      const curAction = this._parent._proxy._animations['Die2'].action;
+
+      if (prevState) {
+        const prevAction = this._parent._proxy._animations[prevState.Name].action;
+        
+        curAction.setLoop(THREE.LoopOnce, 1);
+        curAction.clampWhenFinished = true;
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
+        curAction.play();
+      }
+      else{
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
+        curAction.play();
+      }
+    }
+  
+    Exit() {
+    }
+  
+    Update(timeElapsed, input) { 
+    }
+  };
   
   class IdleState2 extends State2 {
     constructor(parent) {
       super(parent);
     }
-  
+    
+    
     get Name() {
       return 'Idle2';
     }
+
+    Dead(){
+      this.die = true;
+    }
   
     Enter(prevState) {
+      this.die = false;
       const idleAction = this._parent._proxy._animations['Idle2'].action;
       if (prevState) {
         const prevAction = this._parent._proxy._animations[prevState.Name].action;
@@ -200,9 +245,12 @@ class State2{
     }
   
     Update(_, input) {
+      let num = document.getElementById("enemybar").offsetWidth
       if (input._keys.forward2 || input._keys.backward2) {
         this._parent.SetState('Run2');
-      } else if (input._keys.punch2) {
+      } else if (num == 10){
+        this._parent.SetState('Die2')} 
+      else if (input._keys.punch2) {
         this._parent.SetState('Punch2');
       } else if (input._keys.dodge2) {
         this._parent.SetState('Dodge2');

@@ -1,6 +1,7 @@
 import FiniteStateMachine from './SceneGraph_StateMachine.js'
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 
+
 export default class CharacterFSM extends FiniteStateMachine {
     constructor(proxy) {
       super();
@@ -13,6 +14,7 @@ export default class CharacterFSM extends FiniteStateMachine {
       this._AddState('Punch', PunchState);
       this._AddState('Run', RunState);
       this._AddState('Jump', JumpState);
+      this._AddState('Die', DieState);
     }
   };
 
@@ -177,6 +179,43 @@ class State{
     Update(timeElapsed, input) { 
     }
   };
+
+  class DieState extends State {
+    constructor(parent) {
+      super(parent);
+
+      this._FinishedCallback = () =>{
+        this._Finished();
+      }
+    }
+  
+    get Name() {
+      return 'Die';
+    }
+  
+    Enter(prevState) {
+      const curAction = this._parent._proxy._animations['Die'].action;
+
+      if (prevState) {
+        const prevAction = this._parent._proxy._animations[prevState.Name].action;
+        
+        curAction.setLoop(THREE.LoopOnce, 1);
+        curAction.clampWhenFinished = true;
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
+        curAction.play();
+      }
+      else{
+        curAction.crossFadeFrom(prevAction, 0.0001  , true);
+        curAction.play();
+      }
+    }
+  
+    Exit() {
+    }
+  
+    Update(timeElapsed, input) { 
+    }
+  };
   
   
   class IdleState extends State {
@@ -207,9 +246,12 @@ class State{
     }
   
     Update(_, input) {
+      let num = document.getElementById("mybar").offsetWidth
       if (input._keys.forward1 || input._keys.backward1) {
         this._parent.SetState('Run');
-      } else if (input._keys.punch1) {
+      } else if (num == 10){
+        this._parent.SetState('Die')}
+     else if (input._keys.punch1) {
         this._parent.SetState('Punch');
       }
       if (input._keys.forward1 || input._keys.backward1) {

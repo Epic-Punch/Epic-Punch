@@ -21,7 +21,6 @@ export default class Player1_Controller {
     //Make movements false 
     _Init(params) {
       this._params = params;
-      
       //Set up the physics of the model moving
       this._decceleration = new THREE.Vector3(-8, -8, -8);
       this._acceleration = new THREE.Vector3(100, 100, 100.0);
@@ -31,7 +30,7 @@ export default class Player1_Controller {
       this._input = new BasicCharacterControllerInput();
       
       this._stateMachine = new CharacterFSM(
-        new BasicCharacterControllerProxy(this._animations));
+        new BasicCharacterControllerProxy(this._animations), this.gameover);
     
 
   
@@ -52,7 +51,6 @@ export default class Player1_Controller {
           c.receiveShadow = true;
         });
   
-      
         this._target = fbx;
         this._params.scene.add(this._target);
   
@@ -76,13 +74,10 @@ export default class Player1_Controller {
         const loaderM = new FBXLoader(this._manager);
         loaderM.setPath('./resources/Movements/');
         loaderM.load('Run.fbx', (a) => { _OnLoad('Run', a); });
-        loaderM.load('Forward.fbx', (a) => { _OnLoad('Forward', a); });
-        loaderM.load('Backwards.fbx', (a) => { _OnLoad('Backward', a); });
-        loaderM.load('Walking_left.fbx', (a) => { _OnLoad('Walking_left', a); });
-        loaderM.load('Walking_right.fbx', (a) => { _OnLoad('Walking_right', a); });
         loaderM.load('Punch.fbx', (a) => { _OnLoad('Punch', a); });
         loaderM.load('Idle.fbx', (a) => { _OnLoad('Idle', a); });
-        loaderM.load('Jump.fbx', (a) => { _OnLoad('Jump', a); });
+        loaderM.load('Dodge.fbx', (a) => { _OnLoad('Dodge', a); });
+        loaderM.load('Die.fbx', (a) => { _OnLoad('Die', a); });
       });
     }
   
@@ -96,9 +91,8 @@ export default class Player1_Controller {
       if (!this._target) {
         return;
       }
-  
+
       this._stateMachine.Update(timeInSeconds, this._input);
-  
       const velocity = this._velocity;
       const frameDecceleration = new THREE.Vector3(
           velocity.x * this._decceleration.x,

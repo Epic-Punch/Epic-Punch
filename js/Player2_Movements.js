@@ -22,7 +22,7 @@ export default class Player2_Controller {
     //Make movements false 
     _Init(params) {
       this._params = params;
-     
+      
       //Set up the physics of the model moving
       this._decceleration = new THREE.Vector3(-8, -8, -8);
       this._acceleration = new THREE.Vector3(100, 100, 100.0);
@@ -37,6 +37,8 @@ export default class Player2_Controller {
       this.middle = new THREE.Vector3(0, 0, 0);
       this._LoadModel1();
     }
+
+
   
     _LoadModel1() {
       const loader = new FBXLoader();
@@ -52,7 +54,6 @@ export default class Player2_Controller {
           c.receiveShadow = true;
         });
   
-      
         this._target = fbx;
         this._params.scene.add(this._target);
   
@@ -78,7 +79,8 @@ export default class Player2_Controller {
         loaderM.load('Run2.fbx', (a) => { _OnLoad('Run2', a); });
         loaderM.load('Punch2.fbx', (a) => { _OnLoad('Punch2', a); });
         loaderM.load('Idle2.fbx', (a) => { _OnLoad('Idle2', a); });
-        loaderM.load('Fighting Idle.fbx', (a) => { _OnLoad('Dodge2', a); });
+        loaderM.load('Dodge2.fbx', (a) => { _OnLoad('Dodge2', a); });
+        loaderM.load('Die2.fbx', (a) => { _OnLoad('Die2', a); });
       });
     }
   
@@ -92,9 +94,8 @@ export default class Player2_Controller {
       if (!this._target) {
         return;
       }
-  
       this._stateMachine.Update(timeInSeconds, this._input);
-  
+
       const velocity = this._velocity;
       const frameDecceleration = new THREE.Vector3(
           velocity.x * this._decceleration.x,
